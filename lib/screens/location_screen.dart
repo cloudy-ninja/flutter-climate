@@ -21,7 +21,6 @@ class _LocationScreenState extends State<LocationScreen> {
   @override
   void initState() {
     super.initState();
-    print(widget.locationWeather);
     updateUI(widget.locationWeather);
   }
 
@@ -69,8 +68,8 @@ class _LocationScreenState extends State<LocationScreen> {
                     ),
                   ),
                   FlatButton(
-                    onPressed: () {
-                      Navigator.push(
+                    onPressed: () async {
+                      var typedName = await Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) {
@@ -78,6 +77,13 @@ class _LocationScreenState extends State<LocationScreen> {
                           },
                         ),
                       );
+
+                      if (typedName != null) {
+                        var weatherData = await weather.getCityWeather(typedName);
+                        setState(() {
+                          updateUI(weatherData);
+                        });
+                      }
                     },
                     child: Icon(
                       Icons.location_city,
